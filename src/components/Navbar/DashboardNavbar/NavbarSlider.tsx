@@ -1,6 +1,5 @@
 "use client";
 import logo from "@/assets/Logo.svg";
-import sidebarBg from "@/assets/Sidebar.png";
 import { navigation } from "@/constants/Navigation";
 import { cn } from "@/lib/utils";
 import { Menu, X } from "lucide-react";
@@ -33,10 +32,7 @@ const NavbarSlider = () => {
       </div>
 
       {/* Sidebar Desktop */}
-      <div
-        // style={{ backgroundImage: `url(${sidebarBg.src})` }}
-        className="hidden lg:flex bg-white w-[220px] xl:w-[320px] h-screen border-r px-6 overflow-y-auto shrink-0"
-      >
+      <div className="hidden lg:flex bg-white w-[220px] xl:w-[320px] h-screen border-r px-6 overflow-y-auto shrink-0">
         <SidebarContent isOpen={true} path={path} userRole={userRole} />
       </div>
 
@@ -50,10 +46,7 @@ const NavbarSlider = () => {
           ></div>
 
           {/* Drawer */}
-          <div
-            style={{ backgroundImage: `url(${sidebarBg.src})` }}
-            className="relative z-50 w-[290px] h-full shadow-lg px-6 overflow-y-auto"
-          >
+          <div className="relative z-50 w-[290px] h-full shadow-lg px-6 overflow-y-auto bg-white">
             <div className="flex justify-end items-end py-3">
               <button onClick={toggleSidebar}>
                 <X className="h-6 w-6 text-white" />

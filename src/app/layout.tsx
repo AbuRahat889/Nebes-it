@@ -1,18 +1,13 @@
 import ReduxProvider from "@/redux/provider/ReduxProvider";
 import type { Metadata } from "next";
-import { Arimo, Rubik } from "next/font/google";
+import { Inter } from "next/font/google";
 import { ToastContainer } from "react-toastify";
 import "./globals.css";
 
-const arimo = Arimo({
-  variable: "--font-arimo",
+const inter = Inter({
+  variable: "--font-inter",
   subsets: ["latin"],
   weight: ["400", "500", "600", "700"],
-});
-const rubic = Rubik({
-  variable: "--font-rubik",
-  subsets: ["latin"],
-  weight: ["400", "500", "700"],
 });
 
 export const metadata: Metadata = {
@@ -29,7 +24,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={` ${arimo.variable} ${rubic.variable} antialiased`}>
+      <body className={`${inter.variable} antialiased`}>
         <ReduxProvider>
           <div>{children}</div>
         </ReduxProvider>

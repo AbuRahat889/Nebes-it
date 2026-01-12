@@ -3,20 +3,11 @@
 @tailwind utilities;
 
 :root {
-  --font-arimo: "Arimo", sans-serif;
-  --font-poppins: "Rubik", sans-serif;
-}
-h1 {
-  font-family: var(--font-rubik);
-}
-body {
-  font-family: var(--font-arimo);
+  --font-inter: "Inter", sans-serif;
 }
 
-/* pi chart  */
-.MuiChartsLegend-item {
-  font-size: 14px !important;
-  color: #667085;
+body {
+  font-family: var(--font-inter);
 }
 
 /* Slim Scrollbar Styling */
@@ -36,57 +27,6 @@ body {
 
 .slim-scroll::-webkit-scrollbar-track {
   background-color: transparent;
-}
-
-/* Change placeholder color */
-.custom-date-picker .ant-picker-input > input::placeholder {
-  color: #00a63e !important; /* Your desired placeholder color */
-  opacity: 1;
-}
-
-/* Change calendar icon color */
-.custom-date-picker .ant-picker-suffix svg {
-  fill: #00a63e !important; /* icon color */
-  color: #00a63e !important;
-}
-
-
-
-/* tab style  */
-.ant-select-selector {
-  @apply rounded-xl px-5 py-7 border-2 border-[#D9D9D9] text-base font-medium !important;
-}
-.ant-select-arrow {
-  font-size: 15px !important;
-  color: #30373d !important;
-  margin-top: 9px !important ;
-}
-
-/* switch custom css */
-/* ant-switch css-dev-only-do-not-override-pjilya ant-switch-checked */
-.ant-switch.css-dev-only-do-not-override-pjilya {
-  height: 30px;
-  width: 50px;
-  background: #f0f0f2 !important;
-  padding-left: 50px;
-}
-.ant-switch.css-dev-only-do-not-override-pjilya.ant-switch-checked {
-  height: 30px;
-  width: 50px;
-  background: #6bafb2 !important;
-}
-.ant-switch-handle {
-  height: 20px !important;
-  width: 20px !important;
-  margin: 3px -3px;
-  /* left: 10px !important; */
-}
-
-.ant-switch-handle::before {
-  height: 20px !important;
-  width: 20px !important;
-  /* margin: 3px -3px; */
-  left: 5px;
 }
 
 @layer base {
