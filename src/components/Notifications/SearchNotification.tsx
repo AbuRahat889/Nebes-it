@@ -51,7 +51,7 @@ export default function SearchNotification({
     setDepartment1("");
     setDepartment2("");
     setEmployeeSearch("");
-    setSelectedDate("2025-06-15");
+    setSelectedDate("");
     // No need to notify parent here
   };
 

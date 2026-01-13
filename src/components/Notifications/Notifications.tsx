@@ -43,14 +43,18 @@ export default function NoticeManagement() {
                 <span className="text-green-600 font-semibold">
                   Active Notices:
                 </span>
-                <span className="ml-2 text-green-600 font-bold">8</span>
+                <span className="ml-2 text-green-600 font-bold">
+                  {data?.meta?.totalActive || 0}
+                </span>
               </div>
 
               <div>
                 <span className="text-orange-500 font-semibold">
                   Draft Notice:
                 </span>
-                <span className="ml-2 text-orange-500 font-bold">04</span>
+                <span className="ml-2 text-orange-500 font-bold">
+                  {data?.meta?.totalDraft || 0}
+                </span>
               </div>
             </div>
           </div>
