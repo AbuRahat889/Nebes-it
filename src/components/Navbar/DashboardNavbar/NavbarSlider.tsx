@@ -72,9 +72,9 @@ const SidebarContent = ({
   path: string;
   userRole: string | undefined;
 }) => (
-  <aside className="flex flex-col justify-between  py-10 w-full h-full">
+  <aside className="flex flex-col py-10 w-full h-full">
     {/* Logo */}
-    <div className=" mb-12">
+    <div className="mb-12">
       <Image
         src={logo}
         alt="Logo"
