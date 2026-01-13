@@ -1,20 +1,32 @@
 import { formatDate } from "@/lib/dateFormate";
+import { useUpdateStatusMutation } from "@/redux/api/notifications";
 import { Notice } from "@/Types/Notice";
 import { Edit2, Eye, MoreVertical } from "lucide-react";
-import React, { useState } from "react";
-
-
+import { useState } from "react";
+import { ImSpinner11 } from "react-icons/im";
 
 export default function NotificationsHistory({
   notices,
 }: {
   notices: Notice[];
 }) {
-  // store the ID of the opened menu
   const [openMenuId, setOpenMenuId] = useState<number | null>(null);
 
-  const toggleMenu = (id: number) => {
-    setOpenMenuId((prev) => (prev === id ? null : id));
+  const [updateStatusFN, { isLoading }] = useUpdateStatusMutation();
+  const toggleMenu = async (id: number, status: string) => {
+    try {
+      const statusInfo = {
+        status: status === "PUBLISHED" ? "ARCHIVED" : "PUBLISHED",
+        id: id,
+      };
+
+      const res = await updateStatusFN(statusInfo).unwrap();
+      if (res?.success) {
+        setOpenMenuId(null);
+      }
+    } catch (error) {
+      console.error("Error updating status:", error);
+    }
   };
 
   return (
@@ -101,7 +113,9 @@ export default function NotificationsHistory({
                       </button>
 
                       <button
-                        onClick={() => toggleMenu(notice.id)}
+                        onClick={() =>
+                          setOpenMenuId(!openMenuId ? notice.id : null)
+                        }
                         className="p-2 hover:bg-gray-200 rounded-lg"
                       >
                         <MoreVertical size={18} />
@@ -118,8 +132,15 @@ export default function NotificationsHistory({
                               type="checkbox"
                               className="sr-only peer"
                               defaultChecked={notice.status === "PUBLISHED"}
+                              onChange={() =>
+                                toggleMenu(notice.id, notice.status)
+                              }
                             />
-                            <div className="w-11 h-6 bg-gray-200 rounded-full peer peer-checked:bg-green-500 after:absolute after:top-[2px] after:left-[2px] after:h-5 after:w-5 after:bg-white after:rounded-full after:transition-all peer-checked:after:translate-x-full" />
+                            {isLoading ? (
+                              <ImSpinner11 className="animate-spin" />
+                            ) : (
+                              <div className="w-11 h-6 bg-gray-200 rounded-full peer peer-checked:bg-green-500 after:absolute after:top-[2px] after:left-[2px] after:h-5 after:w-5 after:bg-white after:rounded-full after:transition-all peer-checked:after:translate-x-full" />
+                            )}
                           </label>
                         </div>
                       </div>
