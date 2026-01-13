@@ -6,9 +6,19 @@ import Link from "next/link";
 import Pagination from "../ui/Pagination";
 import NotificationsHistory from "./NotificationsHistory";
 import SearchNotification from "./SearchNotification";
+import { useState } from "react";
 
 export default function NoticeManagement() {
-  const { data } = useGetAllNotificationsQuery("");
+  const [currentPage, setCurrentPage] = useState(1);
+  const { data } = useGetAllNotificationsQuery({
+    page: currentPage,
+    limit: 10,
+  });
+  const totalPages = data?.meta?.totalPages || 1;
+
+  const handlePageChange = (page: number) => {
+    setCurrentPage(page);
+  };
 
   return (
     <div className="min-h-screen ">
@@ -54,9 +64,9 @@ export default function NoticeManagement() {
       <NotificationsHistory notices={data?.data} />
 
       <Pagination
-        currentPage={1}
-        totalPages={10}
-        onPageChange={(page: number) => console.log(page)}
+        currentPage={currentPage}
+        totalPages={totalPages}
+        onPageChange={handlePageChange}
       />
     </div>
   );

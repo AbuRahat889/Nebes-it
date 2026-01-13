@@ -4,9 +4,10 @@ const AuthApi = baseApi.injectEndpoints({
   endpoints: (build) => ({
     //create user api
     getAllNotifications: build.query({
-      query: () => ({
+      query: ({ page, limit }) => ({
         url: `/notices`,
         method: "GET",
+        params: { page, limit },
       }),
       providesTags: ["notices"],
     }),
