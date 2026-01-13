@@ -1,5 +1,7 @@
 "use client";
 
+import Link from "next/link";
+
 interface SuccessNotificationProps {
   title?: string;
   description?: string;
@@ -52,11 +54,17 @@ export function SuccessNotification({
         <p className="text-center text-gray-600 text-sm mb-8">{description}</p>
 
         {/* Action Buttons */}
-        <div className="space-x-3">
-          <button className="px-8 py-2 border-2 border-blue-500 text-blue-600 rounded-full font-medium hover:bg-blue-50">
+        <div className="flex items-center gap-1">
+          <Link
+            href={"/notifications"}
+            className="px-8 py-2 border-2 border-blue-500 text-blue-600 rounded-full font-medium hover:bg-blue-50"
+          >
             View Notice
-          </button>
-          <button className="px-8 py-2 border-2 border-orange-500 text-orange-500 rounded-full font-medium">
+          </Link>
+          <button
+            onClick={onClose}
+            className="px-8 py-2 border-2 border-orange-500 text-orange-500 rounded-full font-medium"
+          >
             + Create Another
           </button>
           <button

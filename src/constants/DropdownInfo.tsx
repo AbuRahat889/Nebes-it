@@ -1,18 +1,13 @@
 export const departmentOptions = [
-  { value: "individual", label: "Individual" },
-  { value: "hr", label: "HR Department" },
-  { value: "it", label: "IT Department" },
-  { value: "finance", label: "Finance Department" },
-  { value: "sales", label: "Sales Team" },
+  { value: "ALL", label: "All Departments" },
+  { value: "EMPLOYEE", label: "Individual" },
+  { value: "TEAM", label: "Team" },
 ];
 
 export const noticeTypeOptions = [
-  { value: "general", label: "General / Company-Wide" },
-  { value: "holiday", label: "Holiday & Event" },
-  { value: "policy", label: "HR & Policy Update" },
-  { value: "finance", label: "Finance & Payroll" },
-  { value: "warning", label: "Warning / Disciplinary" },
-  { value: "urgent", label: "Emergency / Urgent" },
+  { value: "REMINDER", label: "Reminder" },
+  { value: "ALERT", label: "Alert" },
+  { value: "GENERAL", label: "General" },
 ];
 
 export const employeeOptions = [
@@ -30,4 +25,3 @@ export const positionOptions = [
   { value: "analyst", label: "Analyst" },
   { value: "executive", label: "Executive" },
 ];
-

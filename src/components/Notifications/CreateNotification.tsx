@@ -1,18 +1,20 @@
 "use client";
 
-import type React from "react";
-import { useState } from "react";
-import { useForm, FormProvider } from "react-hook-form";
-import { CustomDropdown } from "../ui/dropdown";
-import { FormInput } from "../ui/Input";
 import {
   departmentOptions,
   employeeOptions,
   noticeTypeOptions,
   positionOptions,
 } from "@/constants/DropdownInfo";
+import { useCreateNotificatiosMutation } from "@/redux/api/notifications";
+import type React from "react";
+import { useState } from "react";
+import { Controller, FormProvider, useForm } from "react-hook-form";
+import { CustomDropdown } from "../ui/dropdown";
+import { FormInput } from "../ui/Input";
 import Modal from "../ui/modal";
 import { SuccessNotification } from "./SuccesfullModal";
+import { useRouter } from "next/navigation";
 
 export default function CreateNoticePage() {
   const methods = useForm({
@@ -28,20 +30,74 @@ export default function CreateNoticePage() {
     },
   });
 
-  const { handleSubmit, reset } = methods;
-  const [uploadedFile, setUploadedFile] = useState<string | null>(null);
-  const [isOpen, setIsOpen] = useState(false);
+  const { handleSubmit, reset, control, register } = methods;
 
-  const onSubmit = (data: any) => {
-    console.log("[v0] Form submitted with data:", data);
-    console.log("[v0] Uploaded file:", uploadedFile);
-    // Handle form submission here
-    setIsOpen(true);
+  const [uploadedFile, setUploadedFile] = useState<string | null>(null);
+  const [employeeId, setEmployeeId] = useState<string>("");
+  const [position, setPosition] = useState<string>("");
+  const [noticeType, setNoticeType] = useState<string>("");
+  const [targetDepartment, setTargetDepartment] = useState<string>("");
+  const [isOpen, setIsOpen] = useState(false);
+  const router = useRouter();
+
+  const [createFN] = useCreateNotificatiosMutation();
+
+  const onSubmit = async (data: any) => {
+    const isoPublishDate = data.publishDate
+      ? new Date(data.publishDate).toISOString()
+      : null;
+    const notificationData = {
+      title: data.noticeTitle,
+      employeeId: employeeId,
+      employeeName: data.employeeName,
+      body: data.noticeBody,
+      noticeType: noticeType,
+      publishDate: isoPublishDate,
+      targetType: targetDepartment,
+      position: position,
+      uploadedFile: uploadedFile,
+    };
+    try {
+      const res = await createFN(notificationData).unwrap();
+      if (res?.success) {
+        setIsOpen(true);
+        reset();
+        setUploadedFile(null);
+      }
+    } catch (error) {
+      console.log(error);
+    }
   };
 
-  const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
-      setUploadedFile(e.target.files[0].name);
+      const file = e.target.files[0];
+
+      // Show a temporary file name while uploading
+      setUploadedFile("Uploading...");
+
+      const formData = new FormData();
+      formData.append("image", file);
+
+      try {
+        const res = await fetch(
+          `https://api.imgbb.com/1/upload?key=1e13255856d715beab83748dbccfb5e9`,
+          {
+            method: "POST",
+            body: formData,
+          }
+        );
+        const data = await res.json();
+
+        if (data.success) {
+          setUploadedFile(data.data.url); // Save the image URL
+        } else {
+          setUploadedFile(null);
+        }
+      } catch (error) {
+        console.log(error);
+        setUploadedFile(null);
+      }
     }
   };
 
@@ -51,10 +107,13 @@ export default function CreateNoticePage() {
   };
 
   return (
-    <div className="min-h-screen  p-6">
+    <div className="min-h-screen p-6">
       {/* Header */}
       <div className="flex items-center gap-4 mb-6">
-        <button className="p-2 hover:bg-gray-100 rounded-lg border">
+        <button
+          onClick={() => router.back()}
+          className="p-2 hover:bg-gray-100 rounded-lg border"
+        >
           <svg
             className="w-5 h-5"
             fill="none"
@@ -72,7 +131,6 @@ export default function CreateNoticePage() {
         <h1 className="text-xl font-normal text-textColor">Create a Notice</h1>
       </div>
 
-      {/* Instructions */}
       <FormProvider {...methods}>
         <form onSubmit={handleSubmit(onSubmit)} className="">
           <div className="bg-white rounded-xl border border-borderColor">
@@ -81,19 +139,20 @@ export default function CreateNoticePage() {
                 Please fill in the details below
               </p>
             </div>
-            {/* Form */}
+
             <div className="p-6">
-              <div className="bg-[#f5f6fa] p-6 rounded-xl">
+              {/* Department Dropdown */}
+              <div className="bg-[#f5f6fa] p-6 rounded-xl mb-4">
                 <CustomDropdown
-                  // name="targetDepartment"
                   label="Target Department(s) or Individual"
                   options={departmentOptions}
                   placeholder="Select a department"
+                  onChange={setTargetDepartment}
                 />
               </div>
 
               {/* Notice Title */}
-              <div>
+              <div className="mb-4">
                 <FormInput
                   name="noticeTitle"
                   type="text"
@@ -104,12 +163,13 @@ export default function CreateNoticePage() {
               </div>
 
               {/* Three Column Row */}
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
                 <div>
                   <CustomDropdown
                     label="Select Employee ID"
                     options={employeeOptions}
                     placeholder="Select employee designation"
+                    onChange={setEmployeeId}
                   />
                 </div>
                 <div>
@@ -125,36 +185,50 @@ export default function CreateNoticePage() {
                     label="Position"
                     options={positionOptions}
                     placeholder="Select employee department"
+                    onChange={setPosition}
                   />
                 </div>
               </div>
 
               {/* Notice Type and Publish Date */}
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
                 <div>
                   <CustomDropdown
                     label="Notice Type"
                     options={noticeTypeOptions}
                     placeholder="Select Notice Type"
+                    onChange={setNoticeType}
                   />
                 </div>
                 <div>
-                  <FormInput
+                  {/* Date Picker */}
+                  <Controller
+                    control={control}
                     name="publishDate"
-                    type="text"
-                    label="Publish Date"
-                    required
+                    render={({ field }) => (
+                      <div className="flex flex-col">
+                        <label className="mb-1 font-medium text-gray-700">
+                          Publish Date
+                        </label>
+                        <input
+                          type="date"
+                          {...field}
+                          className="px-4 py-3 border border-[#9096b1] rounded-lg text-[#747474] text-base font-medium outline-none"
+                          required
+                        />
+                      </div>
+                    )}
                   />
                 </div>
               </div>
 
               {/* Notice Body */}
-              <div>
-                <FormInput
-                  name="noticeBody"
-                  type="text"
-                  label="Notice Body"
+              <div className="mb-4">
+                <textarea
+                  {...register("noticeBody")}
                   placeholder="Write the details about notice"
+                  rows={5}
+                  className="w-full px-4 py-3 border border-[#9096b1] rounded-lg text-[#747474] text-base font-medium outline-none resize-none mt-2"
                 />
               </div>
 
@@ -199,7 +273,7 @@ export default function CreateNoticePage() {
 
                 {/* Uploaded File */}
                 {uploadedFile && (
-                  <div className="mt-4 flex items-center gap-2 bg-[#f5f6fa]  rounded-lg max-w-96 p-2">
+                  <div className="mt-4 flex items-center gap-2 bg-[#f5f6fa] rounded-lg max-w-96 p-2">
                     <svg
                       className="w-5 h-5 text-gray-600"
                       fill="none"
@@ -230,8 +304,9 @@ export default function CreateNoticePage() {
               </div>
             </div>
           </div>
+
           {/* Action Buttons */}
-          <div className="flex justify-end  gap-4 pt-6">
+          <div className="flex justify-end gap-4 pt-6">
             <button
               type="button"
               onClick={handleCancel}
@@ -243,7 +318,15 @@ export default function CreateNoticePage() {
               type="button"
               onClick={() =>
                 handleSubmit((data) => {
-                  console.log("[v0] Draft saved:", data);
+                  const fullData = {
+                    ...data,
+                    employeeId,
+                    position,
+                    noticeType,
+                    targetDepartment,
+                    uploadedFile,
+                  };
+                  console.log("[v0] Draft saved:", fullData);
                 })()
               }
               className="px-8 py-2 border-2 border-blue-500 text-blue-600 rounded-full font-medium hover:bg-blue-50"
@@ -261,7 +344,7 @@ export default function CreateNoticePage() {
       </FormProvider>
 
       <Modal isModalOpen={isOpen} setIsModalOpen={setIsOpen}>
-        <SuccessNotification />
+        <SuccessNotification onClose={() => setIsOpen(false)} />
       </Modal>
     </div>
   );

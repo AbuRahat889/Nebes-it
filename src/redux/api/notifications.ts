@@ -18,8 +18,20 @@ const AuthApi = baseApi.injectEndpoints({
       }),
       invalidatesTags: ["notices"],
     }),
+    createNotificatios: build.mutation({
+      query: (data) => ({
+        url: `/notices`,
+        method: "POST",
+        body: data,
+      }),
+      invalidatesTags: ["notices"],
+    }),
   }),
 });
 
-export const { useGetAllNotificationsQuery, useUpdateStatusMutation } = AuthApi;
+export const {
+  useGetAllNotificationsQuery,
+  useUpdateStatusMutation,
+  useCreateNotificatiosMutation,
+} = AuthApi;
 export default AuthApi;
