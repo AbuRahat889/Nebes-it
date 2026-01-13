@@ -3,8 +3,7 @@ import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import { RootState } from "../store/store";
 
 const baseApiHandler = () => {
-  // const apiUrl = "http://10.0.30.47:5031/api/v1";
-  const apiUrl = "https://apizerukion.smtsigma.com/api/v1";
+  const apiUrl = "http://localhost:5000/api/v1";
   return apiUrl;
 };
 

@@ -1,89 +1,15 @@
 "use client";
 
-import { Notice } from "@/Types/Notice";
+import { useGetAllNotificationsQuery } from "@/redux/api/notifications";
 import { Edit2, Plus } from "lucide-react";
 import Link from "next/link";
 import Pagination from "../ui/Pagination";
 import NotificationsHistory from "./NotificationsHistory";
 import SearchNotification from "./SearchNotification";
 
-const notices: Notice[] = [
-  {
-    id: 1,
-    title: "Office closed on Friday for maintenance.",
-    type: "General / Company-Wide",
-    department: "All Department",
-    departmentColor: "text-blue-600",
-    publishedOn: "15-Jun-2025",
-    status: "Published",
-  },
-  {
-    id: 2,
-    title: "Eid al-Fitr holiday schedule.",
-    type: "Holiday & Event",
-    department: "Finance",
-    departmentColor: "text-blue-600",
-    publishedOn: "15-Jun-2025",
-    status: "Published",
-  },
-  {
-    id: 3,
-    title: "Updated code of conduct policy",
-    type: "HR & Policy Update",
-    department: "Sales Team",
-    departmentColor: "text-orange-500",
-    publishedOn: "15-Jun-2025",
-    status: "Published",
-  },
-  {
-    id: 4,
-    title: "Payroll for October will be processed on 28th",
-    type: "Finance & Payroll",
-    department: "Web Team",
-    departmentColor: "text-blue-600",
-    publishedOn: "15-Jun-2025",
-    status: "Published",
-  },
-  {
-    id: 5,
-    title: "System update scheduled for 30 Oct 10:09 PM",
-    type: "IT / System Maintenance",
-    department: "Database Team",
-    departmentColor: "text-purple-600",
-    publishedOn: "15-Jun-2025",
-    status: "Published",
-    isToggled: true,
-  },
-  {
-    id: 6,
-    title: "Design team sprint review moved to Tuesday",
-    type: "Department / Team",
-    department: "Admin",
-    departmentColor: "text-purple-600",
-    publishedOn: "15-Jun-2025",
-    status: "Published",
-  },
-  {
-    id: 7,
-    title: "Unauthorized absence recorded on 18 Oct 2025",
-    type: "Warning / Disciplinary",
-    department: "Individual",
-    departmentColor: "text-cyan-600",
-    publishedOn: "15-Jun-2025",
-    status: "Unpublished",
-  },
-  {
-    id: 8,
-    title: "Office closed today due to severe weather",
-    type: "Emergency / Urgent",
-    department: "HR",
-    departmentColor: "text-pink-600",
-    publishedOn: "15-Jun-2025",
-    status: "Draft",
-  },
-];
-
 export default function NoticeManagement() {
+  const { data } = useGetAllNotificationsQuery("");
+
   return (
     <div className="min-h-screen ">
       <div className="px-8">
@@ -125,7 +51,7 @@ export default function NoticeManagement() {
         <SearchNotification />
       </div>
 
-      <NotificationsHistory notices={notices} />
+      <NotificationsHistory notices={data?.data} />
 
       <Pagination
         currentPage={1}

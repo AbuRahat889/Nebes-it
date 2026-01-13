@@ -24,7 +24,7 @@ export default function SearchNotification() {
         <input
           type="text"
           placeholder="Employee Id/ Name"
-          className="text-primaryColor text-base font-medium outline-none px-5 py-2 bg-transparent border border-borderColor rounded-lg"
+          className="text-primaryColor text-base font-medium outline-none px-5 py-2 mt-2 bg-transparent border border-borderColor rounded-lg"
         />
 
         <CustomDropdown

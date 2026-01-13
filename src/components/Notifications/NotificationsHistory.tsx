@@ -1,6 +1,9 @@
+import { formatDate } from "@/lib/dateFormate";
 import { Notice } from "@/Types/Notice";
 import { Edit2, Eye, MoreVertical } from "lucide-react";
 import React, { useState } from "react";
+
+
 
 export default function NotificationsHistory({
   notices,
@@ -46,7 +49,7 @@ export default function NotificationsHistory({
             </thead>
 
             <tbody>
-              {notices.map((notice, index) => (
+              {notices?.map((notice, index) => (
                 <tr
                   key={notice.id}
                   className={`border-b ${
@@ -61,24 +64,24 @@ export default function NotificationsHistory({
                     {notice.title}
                   </td>
 
-                  <td className="px-4 py-4 text-sm">{notice.type}</td>
+                  <td className="px-4 py-4 text-sm">{notice?.noticeType}</td>
 
                   <td className="px-4 py-4">
-                    <span
-                      className={`text-sm font-medium ${notice.departmentColor}`}
-                    >
-                      {notice.department}
+                    <span className={`text-sm font-medium `}>
+                      {notice.position}
                     </span>
                   </td>
 
-                  <td className="px-4 py-4 text-sm">{notice.publishedOn}</td>
+                  <td className="px-4 py-4 text-sm">
+                    {formatDate(notice.publishDate)}
+                  </td>
 
                   <td className="px-4 py-4">
                     <span
                       className={`px-3 py-1 rounded-md text-xs font-semibold ${
-                        notice.status === "Published"
+                        notice.status === "PUBLISHED"
                           ? "bg-green-100 text-green-700"
-                          : notice.status === "Unpublished"
+                          : notice.status === "DRAFT"
                           ? "bg-orange-100 text-orange-700"
                           : "bg-gray-100 text-gray-700"
                       }`}
@@ -114,7 +117,7 @@ export default function NotificationsHistory({
                             <input
                               type="checkbox"
                               className="sr-only peer"
-                              defaultChecked={notice.status === "Published"}
+                              defaultChecked={notice.status === "PUBLISHED"}
                             />
                             <div className="w-11 h-6 bg-gray-200 rounded-full peer peer-checked:bg-green-500 after:absolute after:top-[2px] after:left-[2px] after:h-5 after:w-5 after:bg-white after:rounded-full after:transition-all peer-checked:after:translate-x-full" />
                           </label>
