@@ -22,7 +22,6 @@ export default function NoticeManagement() {
     limit: 10,
     params: { ...filters },
   });
-  console.log(data, "data");
   const totalPages = data?.meta?.totalPages || 1;
 
   const handlePageChange = (page: number) => {
@@ -59,16 +58,19 @@ export default function NoticeManagement() {
             </div>
           </div>
           <div className="flex gap-3">
-            <Link href={"/notifications/create-notifications"}>
+            <Link href={"/notifications/create-notifications?type=PUBLISHED"}>
               <button className="px-4 py-2 bg-orange-500 hover:bg-orange-600 text-white rounded-lg font-medium flex items-center gap-2 transition-colors">
                 <Plus size={18} />
                 Create Notice
               </button>
             </Link>
-            <button className="px-4 py-2 border border-orange-500 text-orange-500 hover:bg-orange-50 rounded-lg font-medium flex items-center gap-2 transition-colors">
+            <Link
+              href={"/notifications/create-notifications?type=DRAFT"}
+              className="px-4 py-2 border border-orange-500 text-orange-500 hover:bg-orange-50 rounded-lg font-medium flex items-center gap-2 transition-colors"
+            >
               <Edit2 size={18} />
               AI Draft Notice
-            </button>
+            </Link>
           </div>
         </div>
         <SearchNotification onFiltersChange={setFilters} />

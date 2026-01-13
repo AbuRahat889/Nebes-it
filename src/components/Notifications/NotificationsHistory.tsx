@@ -4,6 +4,8 @@ import { Notice } from "@/Types/Notice";
 import { Edit2, Eye, MoreVertical } from "lucide-react";
 import { useState } from "react";
 import { ImSpinner11 } from "react-icons/im";
+import Modal from "../ui/modal";
+import NotificationDetails from "./NotificationDetails";
 
 export default function NotificationsHistory({
   notices,
@@ -11,7 +13,8 @@ export default function NotificationsHistory({
   notices: Notice[];
 }) {
   const [openMenuId, setOpenMenuId] = useState<number | null>(null);
-
+  const [selectedNoticeId, setSelectedNoticeId] = useState<number | null>(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const [updateStatusFN, { isLoading }] = useUpdateStatusMutation();
   const toggleMenu = async (id: number, status: string) => {
     try {
@@ -104,7 +107,13 @@ export default function NotificationsHistory({
 
                   <td className="px-4 py-4 relative">
                     <div className="flex items-center gap-2">
-                      <button className="p-2 hover:bg-gray-200 rounded-lg">
+                      <button
+                        onClick={() => {
+                          setIsModalOpen(true);
+                          setSelectedNoticeId(notice.id);
+                        }}
+                        className="p-2 hover:bg-gray-200 rounded-lg"
+                      >
                         <Eye size={18} />
                       </button>
 
@@ -152,6 +161,10 @@ export default function NotificationsHistory({
           </table>
         </div>
       </div>
+
+      <Modal isModalOpen={isModalOpen} setIsModalOpen={setIsModalOpen}>
+        <NotificationDetails id={selectedNoticeId} />
+      </Modal>
     </div>
   );
 }

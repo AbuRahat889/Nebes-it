@@ -27,6 +27,13 @@ const AuthApi = baseApi.injectEndpoints({
       }),
       invalidatesTags: ["notices"],
     }),
+    getSingleNotification: build.query({
+      query: (id) => ({
+        url: `/notices/${id}`,
+        method: "GET",
+      }),
+      providesTags: ["notices"],
+    }),
   }),
 });
 
@@ -34,5 +41,6 @@ export const {
   useGetAllNotificationsQuery,
   useUpdateStatusMutation,
   useCreateNotificatiosMutation,
+  useGetSingleNotificationQuery,
 } = AuthApi;
 export default AuthApi;

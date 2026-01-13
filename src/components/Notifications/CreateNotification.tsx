@@ -14,7 +14,7 @@ import { CustomDropdown } from "../ui/dropdown";
 import { FormInput } from "../ui/Input";
 import Modal from "../ui/modal";
 import { SuccessNotification } from "./SuccesfullModal";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 
 export default function CreateNoticePage() {
   const methods = useForm({
@@ -39,6 +39,9 @@ export default function CreateNoticePage() {
   const [targetDepartment, setTargetDepartment] = useState<string>("");
   const [isOpen, setIsOpen] = useState(false);
   const router = useRouter();
+  const params = useSearchParams();
+  const type = params.get("type");
+  console.log(type, "aslkdjf kj");
 
   const [createFN] = useCreateNotificatiosMutation();
 
@@ -56,6 +59,7 @@ export default function CreateNoticePage() {
       targetType: targetDepartment,
       position: position,
       uploadedFile: uploadedFile,
+      status: type === "DRAFT" ? "DRAFT" : "PUBLISHED",
     };
     try {
       const res = await createFN(notificationData).unwrap();
