@@ -3,6 +3,11 @@ export const departmentOptions = [
   { value: "EMPLOYEE", label: "Individual" },
   { value: "TEAM", label: "Team" },
 ];
+export const status = [
+  { value: "DRAFT", label: "Draft" },
+  { value: "PUBLISHED", label: "Published" },
+  { value: "ARCHIVED", label: "Archived" },
+];
 
 export const noticeTypeOptions = [
   { value: "REMINDER", label: "Reminder" },

@@ -10,10 +10,19 @@ import { useState } from "react";
 
 export default function NoticeManagement() {
   const [currentPage, setCurrentPage] = useState(1);
+  const [filters, setFilters] = useState({
+    employeeName: "",
+    targetType: "",
+    status: "",
+    publishDate: "",
+  });
+
   const { data } = useGetAllNotificationsQuery({
     page: currentPage,
     limit: 10,
+    params: { ...filters },
   });
+  console.log(data, "data");
   const totalPages = data?.meta?.totalPages || 1;
 
   const handlePageChange = (page: number) => {
@@ -58,7 +67,7 @@ export default function NoticeManagement() {
             </button>
           </div>
         </div>
-        <SearchNotification />
+        <SearchNotification onFiltersChange={setFilters} />
       </div>
 
       <NotificationsHistory notices={data?.data} />
